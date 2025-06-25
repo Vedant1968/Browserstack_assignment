@@ -11,11 +11,11 @@ from selenium.webdriver.support import expected_conditions as EC
 import requests
 from urllib.parse import urljoin
 
-# Load .env
+
 load_dotenv()
 API_KEY = os.getenv("RAPIDAPI_KEY")
 
-# Translation via RapidAPI
+
 def translate_texts(texts):
     url = "https://rapid-translate-multi-traduction.p.rapidapi.com/t"
     headers = {
@@ -33,14 +33,14 @@ def translate_texts(texts):
     resp.raise_for_status()
     return resp.json()
 
-# Repeated words function
+
 def extract_repeated_words(texts, min_count=3):
     text = ' '.join(texts).lower()
     words = re.findall(r'\b\w+\b', text)
     freq = Counter(words)
     return {word: count for word, count in freq.items() if count >= min_count}
 
-# Setup Chrome WebDriver
+
 options = Options()
 options.add_argument("--start-maximized")
 driver = webdriver.Chrome(options=options)
@@ -48,7 +48,7 @@ driver = webdriver.Chrome(options=options)
 try:
     driver.get("https://elpais.com/")
 
-    # Accept cookies
+
     try:
         accept_btn = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.ID, "didomi-notice-agree-button"))
@@ -58,7 +58,7 @@ try:
     except:
         print("✅ No cookie popup.")
 
-    # Navigate to Opinión section
+
     opinion = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.LINK_TEXT, "Opinión"))
     )
@@ -82,7 +82,7 @@ try:
             titles.append(title)
             contents.append(content)
 
-            # Download image if available
+
             try:
                 img = article.find_element(By.CSS_SELECTOR, "img")
                 img_url = img.get_attribute("src")
